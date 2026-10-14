@@ -404,6 +404,33 @@
         .dec-shot { padding:22px 26px 26px; background:#f7f9fb; text-align:center; }
         .dec-shot img { width:100%; max-width:920px; border-radius:10px; border:1px solid #e0e6ea; box-shadow:0 4px 16px rgba(0,0,0,0.1); cursor:zoom-in; transition:transform .3s ease; }
         .dec-shot img:hover { transform:scale(1.01); }
+        /* ===== RECORRIDO POR PASOS (mismo componente que Planificación de Focus) ===== */
+        .phase-intro { display:flex; align-items:center; gap:14px; flex-wrap:wrap; margin-bottom:22px; color:#555; line-height:1.6; }
+        .phase-intro .badge { margin:0; }
+        .plan-steps { position:relative; display:grid; grid-template-columns:repeat(var(--steps,9),1fr); gap:8px; margin-bottom:24px; }
+        .plan-steps::before { content:''; position:absolute; top:23px; left:calc(50% / var(--steps,9)); right:calc(50% / var(--steps,9)); height:3px; background:#e2e8ee; z-index:0; }
+        .plan-step { position:relative; z-index:1; background:none; border:none; cursor:pointer; display:flex; flex-direction:column; align-items:center; gap:8px; font-family:'Montserrat',sans-serif; color:#777; padding:0; }
+        .plan-step .ps-num { width:46px; height:46px; border-radius:50%; background:#fff; border:3px solid #e2e8ee; display:flex; align-items:center; justify-content:center; font-weight:800; font-size:1.05em; transition:all .25s ease; }
+        .plan-step .ps-label { font-size:0.74em; font-weight:700; text-align:center; line-height:1.25; }
+        .plan-step:hover .ps-num { border-color:var(--primary-light); color:var(--primary); }
+        .plan-step.active .ps-num { background:linear-gradient(135deg,var(--primary),var(--amber)); border-color:transparent; color:#fff; box-shadow:0 4px 14px rgba(0,0,0,0.18); transform:scale(1.08); }
+        .plan-step.active .ps-label { color:var(--primary-dark); }
+        .plan-panel { display:none; animation: planIn .35s ease; }
+        @keyframes planIn { from { opacity:0; transform:translateY(6px); } to { opacity:1; transform:none; } }
+        .plan-panel.active { display:block; }
+        .plan-tabs { display:flex; flex-wrap:wrap; gap:8px; padding:16px 26px 0; background:#f7f9fb; align-items:center; }
+        .plan-tabs-label { font-family:'Montserrat',sans-serif; font-weight:700; font-size:0.72em; text-transform:uppercase; letter-spacing:0.5px; color:var(--primary-dark); margin-right:4px; }
+        .plan-tab { background:#fff; border:1px solid #dfe5ea; border-radius:20px; padding:5px 13px; font-size:0.8em; color:#555; }
+        /* Capturas de Cuadro de Mando y Decisiones: todas en el mismo tamaño pequeño; clic = lightbox */
+        .plan-panel .dec-shot img, .dec-block .dec-shot img { display:block; width:520px; max-width:100%; height:260px; object-fit:contain; background:#fff; padding:8px; margin:0 auto; }
+        .plan-panel .dec-shot::after, .dec-block .dec-shot::after { content:"🔍 Haz clic en la imagen para ampliarla"; display:block; margin-top:10px; font-family:'Montserrat',sans-serif; font-weight:600; font-size:0.78em; color:var(--primary-dark); }
+        .plan-why { padding:16px 26px 0; background:#f7f9fb; }
+        .plan-why .cm-why-text { margin-top:8px; background:#fff; }
+        @media (max-width: 900px) {
+            .plan-steps { grid-template-columns:repeat(5,1fr); row-gap:16px; }
+            .plan-steps::before { display:none; }
+        }
+
 
         /* ===== GALLERY + LIGHTBOX ===== */
         .gallery { display: grid; grid-template-columns: repeat(auto-fit, minmax(360px, 1fr)); gap: 24px; margin-top: 28px; }
@@ -1044,171 +1071,163 @@
         </div>
     </div>
 
-    <!-- ===================== SLIDE 15: EL DESPACHO · PARTE 1 [VARIABLE] =====================
-         Galería .cm-grid (miniaturas, igual que las demás presentaciones): una .cm-card por captura,
-         agrupadas por módulo de Gestionar (Módulos 1–4). Badge: Informe / Decisión. -->
+    <!-- ===================== SLIDE 15: EL DESPACHO [VARIABLE] =====================
+         Recorrido por pasos (.plan-steps + .plan-panel): una pantalla por paso, en el orden de Gestionar (Módulos 1–7). Categoría: Informe / Decisión. -->
     <div class="slide" id="slide15">
         <div class="slide-header">
-            <h1>🏢 El Despacho · Parte 1</h1>
+            <h1>🏢 El Despacho</h1>
             <h2>Gestionar: analiza los informes y decide en la misma pantalla</h2>
             <div class="slide-number">11</div>
         </div>
         <div class="slide-content">
             <p style="color:#555;line-height:1.7;">En Energy&amp;Co <strong>no existe un módulo de Decisiones separado</strong>. Entra al <strong>Despacho › Gestionar</strong>: allí encontrarás <strong>7 módulos</strong> con los informes de tu empresa y, en la mayoría, los controles para <strong>tomar tus decisiones</strong> del periodo. Lee primero el informe, luego decide. Haz clic en cada imagen para verla completa.</p>
-            <div class="cm-grid">
-                <div class="cm-card">
-                    <div class="cm-img"><img src="assets/cm-valor.jpg" alt="Valor de la compañía: evolución y comparativa" loading="lazy"
-                        onclick="openLightbox('assets/cm-valor.jpg','Módulo 1 · Valor de compañía')"></div>
-                    <div class="cm-body">
-                        <div class="cm-titlerow"><h3>🏆 1 · Valor de compañía</h3><span class="cm-badge">Informe</span></div>
-                        <p class="cm-desc">Evolución del Valor de la Compañía y comparativa con todas las compañías del mercado: año actual, año anterior y variación. <em>Solo consulta.</em></p>
-                        <span class="cm-why-label">💡 Por qué analizarlo</span>
-                        <p class="cm-why-text">Es <strong>tu posición en el ranking</strong>. Revísalo al inicio de cada periodo para saber si tu estrategia está funcionando.</p>
-                    </div>
+
+            <div class="phase-intro">
+                <span class="badge badge-orange">13 pantallas</span>
+                <span>Recórrelas en orden, del módulo 1 al 7: primero lee cada informe y luego toma la decisión que lo acompaña.</span>
+            </div>
+
+            <div class="plan-steps" style="--steps:13">
+                <button class="plan-step active" onclick="showPlanStep(this,1)"><span class="ps-num">1</span><span class="ps-label">Valor de compañía</span></button>
+                <button class="plan-step" onclick="showPlanStep(this,2)"><span class="ps-num">2</span><span class="ps-label">Evalúa tus resultados</span></button>
+                <button class="plan-step" onclick="showPlanStep(this,3)"><span class="ps-num">3</span><span class="ps-label">Promoción de marca</span></button>
+                <button class="plan-step" onclick="showPlanStep(this,4)"><span class="ps-num">4</span><span class="ps-label">Descuento al canal</span></button>
+                <button class="plan-step" onclick="showPlanStep(this,5)"><span class="ps-num">5</span><span class="ps-label">Promoción punto de venta</span></button>
+                <button class="plan-step" onclick="showPlanStep(this,6)"><span class="ps-num">6</span><span class="ps-label">Proveedor</span></button>
+                <button class="plan-step" onclick="showPlanStep(this,7)"><span class="ps-num">7</span><span class="ps-label">Mejora de calidad</span></button>
+                <button class="plan-step" onclick="showPlanStep(this,8)"><span class="ps-num">8</span><span class="ps-label">Márgenes unitarios</span></button>
+                <button class="plan-step" onclick="showPlanStep(this,9)"><span class="ps-num">9</span><span class="ps-label">Precio de venta</span></button>
+                <button class="plan-step" onclick="showPlanStep(this,10)"><span class="ps-num">10</span><span class="ps-label">Ampliar capacidad</span></button>
+                <button class="plan-step" onclick="showPlanStep(this,11)"><span class="ps-num">11</span><span class="ps-label">Unidades a fabricar</span></button>
+                <button class="plan-step" onclick="showPlanStep(this,12)"><span class="ps-num">12</span><span class="ps-label">Balance y ratios</span></button>
+                <button class="plan-step" onclick="showPlanStep(this,13)"><span class="ps-num">13</span><span class="ps-label">Préstamo largo plazo</span></button>
+            </div>
+
+            <div class="plan-panel active" data-step="1">
+                <div class="dec-block">
+                    <div class="dec-head"><div class="dec-num">1</div><div><h3>🏆 1 · Valor de compañía</h3><p>Evolución del Valor de la Compañía y comparativa con todas las compañías del mercado: año actual, año anterior y variación. <em>Solo consulta.</em></p></div></div>
+                    <div class="plan-tabs"><span class="plan-tabs-label">Categoría:</span><span class="plan-tab">Informe</span></div>
+                    <div class="plan-why"><span class="cm-why-label">💡 Por qué analizarlo</span><p class="cm-why-text">Es <strong>tu posición en el ranking</strong>. Revísalo al inicio de cada periodo para saber si tu estrategia está funcionando.</p></div>
+                    <div class="dec-shot"><img src="assets/cm-valor.jpg" alt="Valor de la compañía: evolución y comparativa" loading="lazy" onclick="openLightbox('assets/cm-valor.jpg','Módulo 1 · Valor de compañía')"></div>
                 </div>
-                <div class="cm-card">
-                    <div class="cm-img"><img src="assets/cm-indicadores.jpg" alt="Evalúa tus resultados: indicadores clave" loading="lazy"
-                        onclick="openLightbox('assets/cm-indicadores.jpg','Módulo 2 · Evalúa tus resultados')"></div>
-                    <div class="cm-body">
-                        <div class="cm-titlerow"><h3>📋 2 · Evalúa tus resultados</h3><span class="cm-badge">Informe</span></div>
-                        <p class="cm-desc">Indicadores clave: unidades vendidas, participación, ingresos, resultado bruto, capacidad, ocupación, inventario, marketing y valor de marca, frente a los competidores. <em>Solo consulta.</em></p>
-                        <span class="cm-why-label">💡 Por qué analizarlo</span>
-                        <p class="cm-why-text">En una sola mirada ves <strong>qué mejoró y qué empeoró</strong> respecto al año anterior y frente al resto del mercado.</p>
-                    </div>
+            </div>
+
+            <div class="plan-panel" data-step="2">
+                <div class="dec-block">
+                    <div class="dec-head"><div class="dec-num">2</div><div><h3>📋 2 · Evalúa tus resultados</h3><p>Indicadores clave: unidades vendidas, participación, ingresos, resultado bruto, capacidad, ocupación, inventario, marketing y valor de marca, frente a los competidores. <em>Solo consulta.</em></p></div></div>
+                    <div class="plan-tabs"><span class="plan-tabs-label">Categoría:</span><span class="plan-tab">Informe</span></div>
+                    <div class="plan-why"><span class="cm-why-label">💡 Por qué analizarlo</span><p class="cm-why-text">En una sola mirada ves <strong>qué mejoró y qué empeoró</strong> respecto al año anterior y frente al resto del mercado.</p></div>
+                    <div class="dec-shot"><img src="assets/cm-indicadores.jpg" alt="Evalúa tus resultados: indicadores clave" loading="lazy" onclick="openLightbox('assets/cm-indicadores.jpg','Módulo 2 · Evalúa tus resultados')"></div>
                 </div>
-                <div class="cm-card">
-                    <div class="cm-img"><img src="assets/dec-promocion-marca.jpg" alt="Mercadeo: decisión de promoción de marca" loading="lazy"
-                        onclick="openLightbox('assets/dec-promocion-marca.jpg','Módulo 3 · Mercadeo — Promoción de marca')"></div>
-                    <div class="cm-body">
-                        <div class="cm-titlerow"><h3>📣 3 · Promoción de marca</h3><span class="cm-badge">Decisión</span></div>
-                        <p class="cm-desc"><strong>Mercadeo.</strong> Histórico del gasto en promoción de marca por producto y la decisión del <strong>gasto en promoción de marca</strong> para este periodo.</p>
-                        <span class="cm-why-label">💡 Por qué analizarlo</span>
-                        <p class="cm-why-text">Más promoción eleva el <strong>Valor de Marca (20% del Valor de la Compañía)</strong>, pero todo gasto reduce tu beneficio.</p>
-                    </div>
+            </div>
+
+            <div class="plan-panel" data-step="3">
+                <div class="dec-block">
+                    <div class="dec-head"><div class="dec-num">3</div><div><h3>📣 3 · Promoción de marca</h3><p><strong>Mercadeo.</strong> Histórico del gasto en promoción de marca por producto y la decisión del <strong>gasto en promoción de marca</strong> para este periodo.</p></div></div>
+                    <div class="plan-tabs"><span class="plan-tabs-label">Categoría:</span><span class="plan-tab">Decisión</span></div>
+                    <div class="plan-why"><span class="cm-why-label">💡 Por qué analizarlo</span><p class="cm-why-text">Más promoción eleva el <strong>Valor de Marca (20% del Valor de la Compañía)</strong>, pero todo gasto reduce tu beneficio.</p></div>
+                    <div class="dec-shot"><img src="assets/dec-promocion-marca.jpg" alt="Mercadeo: decisión de promoción de marca" loading="lazy" onclick="openLightbox('assets/dec-promocion-marca.jpg','Módulo 3 · Mercadeo — Promoción de marca')"></div>
                 </div>
-                <div class="cm-card">
-                    <div class="cm-img"><img src="assets/dec-descuento-canal.jpg" alt="Mercadeo: decisión de descuento al canal" loading="lazy"
-                        onclick="openLightbox('assets/dec-descuento-canal.jpg','Módulo 3 · Mercadeo — Descuento al canal')"></div>
-                    <div class="cm-body">
-                        <div class="cm-titlerow"><h3>🤝 3 · Descuento al canal</h3><span class="cm-badge">Decisión</span></div>
-                        <p class="cm-desc"><strong>Mercadeo.</strong> Descuentos cedidos a Hostelería y Gran Distribución en los últimos años y la decisión del <strong>% de descuento por canal</strong>.</p>
-                        <span class="cm-why-label">💡 Por qué analizarlo</span>
-                        <p class="cm-why-text">Un mayor descuento mejora tu <strong>cobertura</strong> en los puntos de venta, pero sacrifica parte de tu <strong>margen</strong>.</p>
-                    </div>
+            </div>
+
+            <div class="plan-panel" data-step="4">
+                <div class="dec-block">
+                    <div class="dec-head"><div class="dec-num">4</div><div><h3>🤝 3 · Descuento al canal</h3><p><strong>Mercadeo.</strong> Descuentos cedidos a Hostelería y Gran Distribución en los últimos años y la decisión del <strong>% de descuento por canal</strong>.</p></div></div>
+                    <div class="plan-tabs"><span class="plan-tabs-label">Categoría:</span><span class="plan-tab">Decisión</span></div>
+                    <div class="plan-why"><span class="cm-why-label">💡 Por qué analizarlo</span><p class="cm-why-text">Un mayor descuento mejora tu <strong>cobertura</strong> en los puntos de venta, pero sacrifica parte de tu <strong>margen</strong>.</p></div>
+                    <div class="dec-shot"><img src="assets/dec-descuento-canal.jpg" alt="Mercadeo: decisión de descuento al canal" loading="lazy" onclick="openLightbox('assets/dec-descuento-canal.jpg','Módulo 3 · Mercadeo — Descuento al canal')"></div>
                 </div>
-                <div class="cm-card">
-                    <div class="cm-img"><img src="assets/dec-promocion-pdv.jpg" alt="Mercadeo: decisión de promoción en el punto de venta" loading="lazy"
-                        onclick="openLightbox('assets/dec-promocion-pdv.jpg','Módulo 3 · Mercadeo — Promoción en el punto de venta')"></div>
-                    <div class="cm-body">
-                        <div class="cm-titlerow"><h3>🏪 3 · Promoción punto de venta</h3><span class="cm-badge">Decisión</span></div>
-                        <p class="cm-desc"><strong>Mercadeo.</strong> Gasto histórico en promoción por canal y la decisión del <strong>gasto en promoción en el punto de venta</strong>.</p>
-                        <span class="cm-why-label">💡 Por qué analizarlo</span>
-                        <p class="cm-why-text">Si tu marca aún es poco conocida, la mejor forma de impulsar ventas es una <strong>mejor presencia en el punto de venta</strong>.</p>
-                    </div>
+            </div>
+
+            <div class="plan-panel" data-step="5">
+                <div class="dec-block">
+                    <div class="dec-head"><div class="dec-num">5</div><div><h3>🏪 3 · Promoción punto de venta</h3><p><strong>Mercadeo.</strong> Gasto histórico en promoción por canal y la decisión del <strong>gasto en promoción en el punto de venta</strong>.</p></div></div>
+                    <div class="plan-tabs"><span class="plan-tabs-label">Categoría:</span><span class="plan-tab">Decisión</span></div>
+                    <div class="plan-why"><span class="cm-why-label">💡 Por qué analizarlo</span><p class="cm-why-text">Si tu marca aún es poco conocida, la mejor forma de impulsar ventas es una <strong>mejor presencia en el punto de venta</strong>.</p></div>
+                    <div class="dec-shot"><img src="assets/dec-promocion-pdv.jpg" alt="Mercadeo: decisión de promoción en el punto de venta" loading="lazy" onclick="openLightbox('assets/dec-promocion-pdv.jpg','Módulo 3 · Mercadeo — Promoción en el punto de venta')"></div>
                 </div>
-                <div class="cm-card">
-                    <div class="cm-img"><img src="assets/dec-proveedor.jpg" alt="Producto: decisión de proveedor de materia prima" loading="lazy"
-                        onclick="openLightbox('assets/dec-proveedor.jpg','Módulo 4 · Producto — Proveedor de materia prima')"></div>
-                    <div class="cm-body">
-                        <div class="cm-titlerow"><h3>🧪 4 · Proveedor materia prima</h3><span class="cm-badge">Decisión</span></div>
-                        <p class="cm-desc"><strong>Producto.</strong> Gasto unitario de producción, costo de cada tipo de proveedor y valor de producto. Decides el <strong>proveedor</strong>: Estándar, Medium o Alta calidad.</p>
-                        <span class="cm-why-label">💡 Por qué analizarlo</span>
-                        <p class="cm-why-text">Más calidad sube el <strong>valor de producto</strong>, pero también el costo por unidad: compara antes con tus márgenes.</p>
-                    </div>
+            </div>
+
+            <div class="plan-panel" data-step="6">
+                <div class="dec-block">
+                    <div class="dec-head"><div class="dec-num">6</div><div><h3>🧪 4 · Proveedor materia prima</h3><p><strong>Producto.</strong> Gasto unitario de producción, costo de cada tipo de proveedor y valor de producto. Decides el <strong>proveedor</strong>: Estándar, Medium o Alta calidad.</p></div></div>
+                    <div class="plan-tabs"><span class="plan-tabs-label">Categoría:</span><span class="plan-tab">Decisión</span></div>
+                    <div class="plan-why"><span class="cm-why-label">💡 Por qué analizarlo</span><p class="cm-why-text">Más calidad sube el <strong>valor de producto</strong>, pero también el costo por unidad: compara antes con tus márgenes.</p></div>
+                    <div class="dec-shot"><img src="assets/dec-proveedor.jpg" alt="Producto: decisión de proveedor de materia prima" loading="lazy" onclick="openLightbox('assets/dec-proveedor.jpg','Módulo 4 · Producto — Proveedor de materia prima')"></div>
                 </div>
-                <div class="cm-card">
-                    <div class="cm-img"><img src="assets/dec-calidad.jpg" alt="Producto: decisión de costo en mejora de calidad" loading="lazy"
-                        onclick="openLightbox('assets/dec-calidad.jpg','Módulo 4 · Producto — Costo en mejora de calidad')"></div>
-                    <div class="cm-body">
-                        <div class="cm-titlerow"><h3>💎 4 · Mejora de calidad</h3><span class="cm-badge">Decisión</span></div>
-                        <p class="cm-desc"><strong>Producto.</strong> Valor de producto (escala 1 a 10) de los últimos años y la decisión del <strong>presupuesto de mejora de calidad</strong>.</p>
-                        <span class="cm-why-label">💡 Por qué analizarlo</span>
-                        <p class="cm-why-text">El <strong>Valor del Producto</strong> pesa un 12% en el Valor de la Compañía y hace tu oferta más atractiva frente a la competencia.</p>
-                    </div>
+            </div>
+
+            <div class="plan-panel" data-step="7">
+                <div class="dec-block">
+                    <div class="dec-head"><div class="dec-num">7</div><div><h3>💎 4 · Mejora de calidad</h3><p><strong>Producto.</strong> Valor de producto (escala 1 a 10) de los últimos años y la decisión del <strong>presupuesto de mejora de calidad</strong>.</p></div></div>
+                    <div class="plan-tabs"><span class="plan-tabs-label">Categoría:</span><span class="plan-tab">Decisión</span></div>
+                    <div class="plan-why"><span class="cm-why-label">💡 Por qué analizarlo</span><p class="cm-why-text">El <strong>Valor del Producto</strong> pesa un 12% en el Valor de la Compañía y hace tu oferta más atractiva frente a la competencia.</p></div>
+                    <div class="dec-shot"><img src="assets/dec-calidad.jpg" alt="Producto: decisión de costo en mejora de calidad" loading="lazy" onclick="openLightbox('assets/dec-calidad.jpg','Módulo 4 · Producto — Costo en mejora de calidad')"></div>
+                </div>
+            </div>
+
+            <div class="plan-panel" data-step="8">
+                <div class="dec-block">
+                    <div class="dec-head"><div class="dec-num">8</div><div><h3>📊 5 · Márgenes unitarios</h3><p><strong>Análisis del margen.</strong> Gasto de producción, marketing y calidad por unidad, beneficio bruto y neto por unidad, y desglose del gasto unitario.</p></div></div>
+                    <div class="plan-tabs"><span class="plan-tabs-label">Categoría:</span><span class="plan-tab">Informe</span></div>
+                    <div class="plan-why"><span class="cm-why-label">💡 Por qué analizarlo</span><p class="cm-why-text">Te dice <strong>cuánto ganas realmente por cada bebida</strong>: la base para fijar el precio.</p></div>
+                    <div class="dec-shot"><img src="assets/cm-margen.jpg" alt="Análisis del margen: márgenes y gasto unitario" loading="lazy" onclick="openLightbox('assets/cm-margen.jpg','Módulo 5 · Análisis del margen — Márgenes unitarios')"></div>
+                </div>
+            </div>
+
+            <div class="plan-panel" data-step="9">
+                <div class="dec-block">
+                    <div class="dec-head"><div class="dec-num">9</div><div><h3>🏷️ 5 · Precio de venta</h3><p><strong>Análisis del margen.</strong> Precio por unidad de los últimos años y la decisión del <strong>precio de venta al público</strong> por producto.</p></div></div>
+                    <div class="plan-tabs"><span class="plan-tabs-label">Categoría:</span><span class="plan-tab">Decisión</span></div>
+                    <div class="plan-why"><span class="cm-why-label">💡 Por qué analizarlo</span><p class="cm-why-text">El precio es la variable que el mercado analiza con más detalle: un precio bajo gana cuota, pero <strong>reduce tu margen</strong>.</p></div>
+                    <div class="dec-shot"><img src="assets/dec-precio.jpg" alt="Análisis del margen: decisión de precio de venta" loading="lazy" onclick="openLightbox('assets/dec-precio.jpg','Módulo 5 · Análisis del margen — Precio de venta al público')"></div>
+                </div>
+            </div>
+
+            <div class="plan-panel" data-step="10">
+                <div class="dec-block">
+                    <div class="dec-head"><div class="dec-num">10</div><div><h3>🏗️ 6 · Ampliar capacidad</h3><p><strong>Producción.</strong> Costo de inversión por unidad de capacidad y excedente de tesorería. Decides cuántas <strong>unidades de capacidad ampliar</strong>.</p></div></div>
+                    <div class="plan-tabs"><span class="plan-tabs-label">Categoría:</span><span class="plan-tab">Decisión</span></div>
+                    <div class="plan-why"><span class="cm-why-label">💡 Por qué analizarlo</span><p class="cm-why-text">Sin capacidad suficiente pierdes ventas; pero ampliar exige <strong>recursos propios o financiación</strong>.</p></div>
+                    <div class="dec-shot"><img src="assets/dec-capacidad.jpg" alt="Producción: decisión de ampliación de capacidad" loading="lazy" onclick="openLightbox('assets/dec-capacidad.jpg','Módulo 6 · Producción — Ampliación de capacidad')"></div>
+                </div>
+            </div>
+
+            <div class="plan-panel" data-step="11">
+                <div class="dec-block">
+                    <div class="dec-head"><div class="dec-num">11</div><div><h3>🏭 6 · Unidades a fabricar</h3><p><strong>Producción.</strong> Capacidad de producción actual y la decisión de <strong>cuántas unidades fabricar</strong> de cada producto.</p></div></div>
+                    <div class="plan-tabs"><span class="plan-tabs-label">Categoría:</span><span class="plan-tab">Decisión</span></div>
+                    <div class="plan-why"><span class="cm-why-label">💡 Por qué analizarlo</span><p class="cm-why-text">Lo que no vendas se <strong>almacena</strong> y genera costos: ajusta la producción a tus ventas esperadas.</p></div>
+                    <div class="dec-shot"><img src="assets/dec-produccion.jpg" alt="Producción: decisión de fabricación de unidades" loading="lazy" onclick="openLightbox('assets/dec-produccion.jpg','Módulo 6 · Producción — Fabricación de unidades')"></div>
+                </div>
+            </div>
+
+            <div class="plan-panel" data-step="12">
+                <div class="dec-block">
+                    <div class="dec-head"><div class="dec-num">12</div><div><h3>💼 7 · Balance y ratios</h3><p><strong>Financiación.</strong> Balance de situación, ratios de liquidez, endeudamiento, márgenes, rentabilidad y actividad, y gastos financieros.</p></div></div>
+                    <div class="plan-tabs"><span class="plan-tabs-label">Categoría:</span><span class="plan-tab">Informe</span></div>
+                    <div class="plan-why"><span class="cm-why-label">💡 Por qué analizarlo</span><p class="cm-why-text">Muestra la <strong>salud financiera</strong> de tu empresa y si puedes asumir nuevas inversiones.</p></div>
+                    <div class="dec-shot"><img src="assets/cm-balance.jpg" alt="Financiación: balance y ratios financieros" loading="lazy" onclick="openLightbox('assets/cm-balance.jpg','Módulo 7 · Financiación — Balance y ratios financieros')"></div>
+                </div>
+            </div>
+
+            <div class="plan-panel" data-step="13">
+                <div class="dec-block">
+                    <div class="dec-head"><div class="dec-num">13</div><div><h3>🏦 7 · Préstamo largo plazo</h3><p><strong>Financiación.</strong> Decisión del monto de <strong>préstamo a largo plazo</strong> que solicitas para el periodo.</p></div></div>
+                    <div class="plan-tabs"><span class="plan-tabs-label">Categoría:</span><span class="plan-tab">Decisión</span></div>
+                    <div class="plan-why"><span class="cm-why-label">💡 Por qué analizarlo</span><p class="cm-why-text">Pídelo solo si tu tesorería no cubre las inversiones: genera <strong>intereses</strong> y aumenta tu endeudamiento.</p></div>
+                    <div class="dec-shot"><img src="assets/dec-prestamo.jpg" alt="Financiación: decisión de préstamo a largo plazo" loading="lazy" onclick="openLightbox('assets/dec-prestamo.jpg','Módulo 7 · Financiación — Préstamo a largo plazo')"></div>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- ===================== SLIDE 16: EL DESPACHO · PARTE 2 [VARIABLE] · Módulos 5–7 ===================== -->
+    <!-- ===================== SLIDE 16: MÉTODOS DE IMPLEMENTACIÓN ===================== -->
     <div class="slide" id="slide16">
-        <div class="slide-header">
-            <h1>🏢 El Despacho · Parte 2</h1>
-            <h2>Margen, producción y financiación: cierra tus decisiones del periodo</h2>
-            <div class="slide-number">12</div>
-        </div>
-        <div class="slide-content">
-            <div class="cm-grid">
-                <div class="cm-card">
-                    <div class="cm-img"><img src="assets/cm-margen.jpg" alt="Análisis del margen: márgenes y gasto unitario" loading="lazy"
-                        onclick="openLightbox('assets/cm-margen.jpg','Módulo 5 · Análisis del margen — Márgenes unitarios')"></div>
-                    <div class="cm-body">
-                        <div class="cm-titlerow"><h3>📊 5 · Márgenes unitarios</h3><span class="cm-badge">Informe</span></div>
-                        <p class="cm-desc"><strong>Análisis del margen.</strong> Gasto de producción, marketing y calidad por unidad, beneficio bruto y neto por unidad, y desglose del gasto unitario.</p>
-                        <span class="cm-why-label">💡 Por qué analizarlo</span>
-                        <p class="cm-why-text">Te dice <strong>cuánto ganas realmente por cada bebida</strong>: la base para fijar el precio.</p>
-                    </div>
-                </div>
-                <div class="cm-card">
-                    <div class="cm-img"><img src="assets/dec-precio.jpg" alt="Análisis del margen: decisión de precio de venta" loading="lazy"
-                        onclick="openLightbox('assets/dec-precio.jpg','Módulo 5 · Análisis del margen — Precio de venta al público')"></div>
-                    <div class="cm-body">
-                        <div class="cm-titlerow"><h3>🏷️ 5 · Precio de venta</h3><span class="cm-badge">Decisión</span></div>
-                        <p class="cm-desc"><strong>Análisis del margen.</strong> Precio por unidad de los últimos años y la decisión del <strong>precio de venta al público</strong> por producto.</p>
-                        <span class="cm-why-label">💡 Por qué analizarlo</span>
-                        <p class="cm-why-text">El precio es la variable que el mercado analiza con más detalle: un precio bajo gana cuota, pero <strong>reduce tu margen</strong>.</p>
-                    </div>
-                </div>
-                <div class="cm-card">
-                    <div class="cm-img"><img src="assets/dec-capacidad.jpg" alt="Producción: decisión de ampliación de capacidad" loading="lazy"
-                        onclick="openLightbox('assets/dec-capacidad.jpg','Módulo 6 · Producción — Ampliación de capacidad')"></div>
-                    <div class="cm-body">
-                        <div class="cm-titlerow"><h3>🏗️ 6 · Ampliar capacidad</h3><span class="cm-badge">Decisión</span></div>
-                        <p class="cm-desc"><strong>Producción.</strong> Costo de inversión por unidad de capacidad y excedente de tesorería. Decides cuántas <strong>unidades de capacidad ampliar</strong>.</p>
-                        <span class="cm-why-label">💡 Por qué analizarlo</span>
-                        <p class="cm-why-text">Sin capacidad suficiente pierdes ventas; pero ampliar exige <strong>recursos propios o financiación</strong>.</p>
-                    </div>
-                </div>
-                <div class="cm-card">
-                    <div class="cm-img"><img src="assets/dec-produccion.jpg" alt="Producción: decisión de fabricación de unidades" loading="lazy"
-                        onclick="openLightbox('assets/dec-produccion.jpg','Módulo 6 · Producción — Fabricación de unidades')"></div>
-                    <div class="cm-body">
-                        <div class="cm-titlerow"><h3>🏭 6 · Unidades a fabricar</h3><span class="cm-badge">Decisión</span></div>
-                        <p class="cm-desc"><strong>Producción.</strong> Capacidad de producción actual y la decisión de <strong>cuántas unidades fabricar</strong> de cada producto.</p>
-                        <span class="cm-why-label">💡 Por qué analizarlo</span>
-                        <p class="cm-why-text">Lo que no vendas se <strong>almacena</strong> y genera costos: ajusta la producción a tus ventas esperadas.</p>
-                    </div>
-                </div>
-                <div class="cm-card">
-                    <div class="cm-img"><img src="assets/cm-balance.jpg" alt="Financiación: balance y ratios financieros" loading="lazy"
-                        onclick="openLightbox('assets/cm-balance.jpg','Módulo 7 · Financiación — Balance y ratios financieros')"></div>
-                    <div class="cm-body">
-                        <div class="cm-titlerow"><h3>💼 7 · Balance y ratios</h3><span class="cm-badge">Informe</span></div>
-                        <p class="cm-desc"><strong>Financiación.</strong> Balance de situación, ratios de liquidez, endeudamiento, márgenes, rentabilidad y actividad, y gastos financieros.</p>
-                        <span class="cm-why-label">💡 Por qué analizarlo</span>
-                        <p class="cm-why-text">Muestra la <strong>salud financiera</strong> de tu empresa y si puedes asumir nuevas inversiones.</p>
-                    </div>
-                </div>
-                <div class="cm-card">
-                    <div class="cm-img"><img src="assets/dec-prestamo.jpg" alt="Financiación: decisión de préstamo a largo plazo" loading="lazy"
-                        onclick="openLightbox('assets/dec-prestamo.jpg','Módulo 7 · Financiación — Préstamo a largo plazo')"></div>
-                    <div class="cm-body">
-                        <div class="cm-titlerow"><h3>🏦 7 · Préstamo largo plazo</h3><span class="cm-badge">Decisión</span></div>
-                        <p class="cm-desc"><strong>Financiación.</strong> Decisión del monto de <strong>préstamo a largo plazo</strong> que solicitas para el periodo.</p>
-                        <span class="cm-why-label">💡 Por qué analizarlo</span>
-                        <p class="cm-why-text">Pídelo solo si tu tesorería no cubre las inversiones: genera <strong>intereses</strong> y aumenta tu endeudamiento.</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- ===================== SLIDE 17: MÉTODOS DE IMPLEMENTACIÓN ===================== -->
-    <div class="slide" id="slide17">
         <div class="slide-header">
             <h1>📚 Métodos de Implementación</h1>
             <h2>Cuatro formas de integrar el simulador en tu programa académico</h2>
-            <div class="slide-number">13</div>
+            <div class="slide-number">12</div>
         </div>
         <div class="slide-content">
 
@@ -1377,12 +1396,12 @@
         </div>
     </div>
 
-    <!-- ===================== SLIDE 18: FAQ ===================== -->
-    <div class="slide" id="slide18">
+    <!-- ===================== SLIDE 17: FAQ ===================== -->
+    <div class="slide" id="slide17">
         <div class="slide-header">
             <h1>❓ Preguntas Frecuentes</h1>
             <h2>Las dudas más comunes antes de iniciar la simulación</h2>
-            <div class="slide-number">14</div>
+            <div class="slide-number">13</div>
         </div>
         <div class="slide-content">
             <div class="accordion">
@@ -1426,8 +1445,8 @@
         </div>
     </div>
 
-    <!-- ===================== SLIDE 19: CIERRE ===================== -->
-    <div class="slide" id="slide19">
+    <!-- ===================== SLIDE 18: CIERRE ===================== -->
+    <div class="slide" id="slide18">
         <div class="closing">
             <h1>¡Gracias!</h1>
             <p class="thanks-sub">Gracias por participar en Energy&amp;Co</p>
@@ -1474,7 +1493,7 @@
 <!-- ===================== NAV BAR ===================== -->
 <div class="nav-bar">
     <button class="nav-btn" id="prevBtn" onclick="changeSlide(-1)" disabled>◀ Anterior</button>
-    <div class="slide-counter" id="slideCounter">1 / 19</div>
+    <div class="slide-counter" id="slideCounter">1 / 18</div>
     <button class="nav-btn" id="nextBtn" onclick="changeSlide(1)">Siguiente ▶</button>
 </div>
 
@@ -1513,6 +1532,13 @@
 
     function toggleAccordion(header) { header.parentElement.classList.toggle('active'); }
     function toggleFactor(header) { header.parentElement.classList.toggle('active'); }
+
+    // ===== RECORRIDO POR PASOS (El Despacho) =====
+    function showPlanStep(btn, n) {
+        const box = btn.closest(".slide-content");
+        box.querySelectorAll(".plan-step").forEach(function(b, i) { b.classList.toggle("active", i === n - 1); });
+        box.querySelectorAll(".plan-panel").forEach(function(p) { p.classList.toggle("active", p.dataset.step == n); });
+    }
 
     // ===== LIGHTBOX =====
     const lightbox = document.getElementById('lightbox');
